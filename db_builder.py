@@ -1,28 +1,37 @@
 from pymongo import MongoClient
 
-server = MongoClient("149.89.150.100")
-
-db = server.sadboiz
-
-
+#server = MongoClient("149.89.150.100")
+server = MongoClient("127.0.0.1")
+db = server.sadboizdb
+c = db.sadboizc
 
 # Opens and reads file into stringthing
-file=open("peeps.csv", "r")
-stringthing = file.read()
+f=open("peeps.csv", "r")
+students = f.read().strip()
+f.close()
+
+f=open("courses.csv", "r")
+courses = f.read().strip()
+f.close()
+
 
 # Splits the string into an array called splitString
-splitString = str.split(stringthing, "\r\n")
-
-dict = {}
-
-# Loops through array line by line
-for line in splitString:
-    if "id" not in line:
-        if len(line)>0 and line[0]=='"':
-            line = line[1:]
-            dict[float(line[line.index('"')+2:])]=line[0:line.index('"')]
-        elif len(line)>0 and splitString.index(line)!=0:
-    #print line
-            dict[float(line[line.index(',')+1:])]=line[0:line.index(',')]
+splitStudent = str.split(students, "\n")
+splitCourses = str.split(courses, "\n")
     
-print dict
+studentsGrades = {}
+for entry in splitCourses:
+    data = str.split(entry, ",")
+    if "id" not in data and int(data[2]) not in studentsGrades:
+        studentsGrades[int(data[2])] = [{data[0]:int(data[1])}]
+    elif "id" not in data:
+        studentsGrades[int(data[2])].append({data[0]:int(data[1])})
+
+for entry in splitStudent:
+    data = str.split(entry, ",")
+    if "id" not in data:
+        studentinfo = {"name":data[0], "age":int(data[1]), "id":int(data[2])}
+        studentinfo["grades"] = studentsGrades[studentinfo["id"]]
+        c.insert_one(studentinfo)
+
+
