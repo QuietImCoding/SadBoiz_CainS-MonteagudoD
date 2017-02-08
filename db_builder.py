@@ -3,7 +3,8 @@ from pymongo import MongoClient
 server = MongoClient("149.89.150.100")
 #server = MongoClient("127.0.0.1")
 db = server.sadboizdb
-c = db.students
+s = db.students
+t = db.teachers
 
 # Opens and reads file into stringthing
 f=open("peeps.csv", "r")
@@ -14,10 +15,14 @@ f=open("courses.csv", "r")
 courses = f.read().strip()
 f.close()
 
+f = open("teachers.csv", "r")
+teachers = f.read().strip()
+f.close()
 
 # Splits the string into an array called splitString
 splitStudent = str.split(students, "\n")
 splitCourses = str.split(courses, "\n")
+splitTeachers = str.split(teachers, "\n")
     
 studentsGrades = {}
 for entry in splitCourses:
@@ -32,8 +37,22 @@ for entry in splitStudent:
     if "id" not in data:
         studentinfo = {"name":data[0], "age":int(data[1]), "id":int(data[2])}
         studentinfo["grades"] = studentsGrades[studentinfo["id"]]
-        c.insert_one(studentinfo)
+        s.insert_one(studentinfo)
 
+for entry in splitTeachers:
+    data = str.split(entry, ",")
+    if "code" not in data:
+        teacherinfo = {"code":data[0], "name": data[1], "period":int(data[2])}
+        studentids = 
+        for i in s.find({"grades.code": data[0]})
+            studentdata.append(i.id)
+        teacherinfo["studentids"] = teacherinfo
+        t.insert_one(studentinfo)
 
-for i in c.find():
+print "STUDENTS:\n"
+for i in s.find():
+    print i
+
+print "\n\nTEACHERS:\n"
+for i in t.find():
     print i
