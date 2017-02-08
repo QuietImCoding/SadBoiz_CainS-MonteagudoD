@@ -3,7 +3,7 @@ from pymongo import MongoClient
 server = MongoClient("149.89.150.100")
 #server = MongoClient("127.0.0.1")
 db = server.sadboizdb
-c = db.sadboizc
+c = db.students
 
 # Opens and reads file into stringthing
 f=open("peeps.csv", "r")
@@ -35,3 +35,5 @@ for entry in splitStudent:
         c.insert_one(studentinfo)
 
 
+for i in c.find():
+    print i
