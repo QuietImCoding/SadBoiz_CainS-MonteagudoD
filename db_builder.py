@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
-server = MongoClient("149.89.150.100")
-#server = MongoClient("127.0.0.1")
+#server = MongoClient("149.89.150.100")
+server = MongoClient("127.0.0.1")
 db = server.sadboizdb
 s = db.students
 t = db.teachers
@@ -43,11 +43,13 @@ for entry in splitTeachers:
     data = str.split(entry, ",")
     if "code" not in data:
         teacherinfo = {"code":data[0], "name": data[1], "period":int(data[2])}
-        studentids = 
-        for i in s.find({"grades.code": data[0]})
-            studentdata.append(i.id)
-        teacherinfo["studentids"] = teacherinfo
-        t.insert_one(studentinfo)
+        studentids = []
+        for student in s.find():
+            for grade in student["grades"]:
+                if data[0] in grade and data[0] not in studentids:
+                    studentids.append(student["id"])
+        teacherinfo["studentids"] = studentids
+        t.insert_one(teacherinfo)
 
 print "STUDENTS:\n"
 for i in s.find():
